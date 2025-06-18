@@ -3,173 +3,172 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Lista Productos</title>
+    <title>Catálogo de Productos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --background-color: #f8f9fa;
+            --text-color: #2b2d42;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #e0e5ec;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f6f8fd 0%, #e9ecef 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            padding: 2rem;
         }
 
-        .login-box {
-            background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        .products-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             width: 100%;
-            max-width: 400px;
-            transition: all 0.3s ease;
+            max-width: 1000px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
         }
 
-        .login-box h2 {
+        h2 {
+            color: var(--primary-color);
             text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #333;
+            margin-bottom: 2rem;
+            font-size: 2rem;
             font-weight: 600;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            transition: border 0.2s;
-        }
-
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #2c80b4;
-        }
-
-        #respuesta {
-            margin-top: 15px;
-            text-align: center;
-            font-weight: 600;
-            color: green;
-        }
-
-        /* ESTILO PARA LISTA DE PRODUCTOS */
-        #productosBox {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
-            width: 100%;
-        }
-
-        #productosBox h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-size: 24px;
-        }
-
-        #listaProductos {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        #listaProductos li {
-            background: #f1f1f1;
-            margin-bottom: 15px;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            font-size: 16px;
-            color: #333;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-
-        #listaProductos li:hover {
-            transform: translateY(-3px);
-            background: #e8f4fd;
         }
 
         .tabla-contenedor {
-            overflow-x: auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 2rem;
         }
 
         #tablaProductos {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        #tablaProductos thead {
-            background-color: #3498db;
+        thead tr {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
             color: white;
         }
 
-        #tablaProductos th,
-        #tablaProductos td {
+        th {
+            padding: 1.2rem 1rem;
             text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        #tablaProductos tr:hover {
-            background-color: #f1f9ff;
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+            color: var(--text-color);
         }
 
-        #tablaProductos td {
-            color: #333;
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        #btnBack {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #btnBack:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+            background: var(--secondary-color);
+        }
+
+        td:nth-child(3) {
+            color: #2ec4b6;
+            font-weight: 600;
+        }
+
+        td:nth-child(5) {
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .products-container {
+                padding: 1rem;
+            }
+
+            th,
+            td {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .tabla-contenedor {
+                overflow-x: auto;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="login-box" id="productosBox">
-        <h2>Lista de Productos</h2>
+    <div class="products-container">
+        <h2>📦 Catálogo de Productos</h2>
         <div class="tabla-contenedor">
             <table id="tablaProductos">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nombre</th>
+                        <th>Producto</th>
                         <th>Precio</th>
                         <th>Descripción</th>
-                        <th>Stock</th>
+                        <th>Disponibles</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Filas insertadas por JS -->
                 </tbody>
             </table>
-            <button id="btnBack" style="padding: 10px 20px; cursor: pointer;">Salir</button>
         </div>
+        <button id="btnBack">🚪 Volver al Inicio</button>
     </div>
 
     <script>
@@ -178,6 +177,7 @@
         btnregresar.addEventListener('click', () => {
             window.location.href = 'index.html';
         });
+
         function obtenerProductos() {
             fetch('http://localhost:5001/products')
                 .then(res => res.json())
