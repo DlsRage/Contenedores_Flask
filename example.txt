@@ -1,0 +1,56 @@
+curl -X POST http://localhost:5000/users   -H "Content-Type: application/json" -d '{
+    "username": "juan",
+    "email": "juan@example.com",
+    "password": "123456"
+}'
+
+curl -X POST http://localhost:5000/users   -H "Content-Type: application/json" -d '{
+    "username": "Eric",
+    "email": "eric@example.com",
+    "password": "123"
+}'
+
+curl -X POST http://localhost:5001/products -H "Content-Type: application/json" -d '{
+    "name": "jugo de naranja",
+    "description": "Botella de 1 litro",
+    "price": 300.0,
+    "stock": "15"
+}'
+
+
+curl -X POST http://localhost:5001/products   -H "Content-Type: application/json" -d '{
+    "name": "leche",
+    "description": "Litro de leche",
+    "price": 200.1,
+    "stock": "10"
+}'
+
+
+curl -X POST http://localhost:5001/products -H "Content-Type: application/json" -d '{
+    "name": "pan",
+    "description": "Pan integral",
+    "price": 150.5,
+    "stock": 25
+}'
+
+curl -X PUT http://localhost:5001/products/1 -H "Content-Type: application/json" -d '{
+    "name": "Eric",
+    "description": "Pan integral",
+    "price": 150.5,
+    "stock": "30"
+}'
+
+curl -X PUT http://localhost:5001/products/2 -H "Content-Type: application/json" -d '{
+    "name": "Eric",
+    "description": "Pan integral",
+    "price": 100.5,
+    "stock": 30
+}'
+
+curl -X DELETE http://localhost:5001/products/2
+
+curl -X POST http://localhost:5000/users   -H "Content-Type: application/json" -d '{
+    "username": "juan",
+    "email": "juan@example.com",
+    "password": "123456"
+}'

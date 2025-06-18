@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e0e5ec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: border 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2c80b4;
+        }
+
+        #respuesta {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: green;
+        }
+
+        /* ESTILO PARA LISTA DE PRODUCTOS */
+        #productosBox {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #productosBox h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        #listaProductos {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #listaProductos li {
+            background: #f1f1f1;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+            color: #333;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        #listaProductos li:hover {
+            transform: translateY(-3px);
+            background: #e8f4fd;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        #tablaProductos {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+
+        #tablaProductos thead {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #tablaProductos th,
+        #tablaProductos td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #tablaProductos tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        #tablaProductos td {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box" id="loginBox">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required>
+
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" required>
+
+            <input type="submit" value="Ingresar">
+        </form>
+        <p id="respuesta"></p>
+    </div>
+    <script>
+        const form = document.getElementById('loginForm');
+        const respuesta = document.getElementById('respuesta');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (document.getElementById('usuario').value === 'admin' && document.getElementById('contrasena').value === 'admin') {
+                window.location.href = 'admin.html';
+                return
+            }
+            const datos = {
+                usuario: document.getElementById('usuario').value,
+                contrasena: document.getElementById('contrasena').value
+            };
+
+            fetch('http://localhost:5003/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error("Login fallido");
+                    return res.json();
+                })
+                .then(data => {
+                    respuesta.textContent = '';
+                    window.location.href = 'usuario_productos.html';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    respuesta.textContent = 'Usuario o contraseña incorrectos';
+                    respuesta.style.color = 'red';
+                });
+        });
+
+    </script>
+
+</body>
+
+</html>
