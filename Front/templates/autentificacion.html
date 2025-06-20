@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Authenticator Setup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .section {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .qr-image {
+            max-width: 256px;
+            margin: 20px 0;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sección de generación de QR -->
+        <div class="section">
+            <h2>Generar Código QR</h2>
+            <button onclick="generateQR()">Generar QR</button>
+            <div id="qrContainer"></div>
+            <div id="qrMessage" class="message"></div>
+        </div>
+        <!-- Sección de verificación -->
+        <div class="section">
+            <h2>Verificar Código</h2>
+            <div class="input-group">
+                <label for="code">Código de Verificación:</label>
+                <input type="text" id="code" placeholder="Ingrese el código de 6 dígitos">
+            </div>
+            <button onclick="verifyCode()">Verificar</button>
+            <div id="verifyMessage" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        const username = {{ dato| tojson | safe }};
+        async function generateQR() {
+            const qrContainer = document.getElementById('qrContainer');
+            const messageDiv = document.getElementById('qrMessage');
+
+            try {
+                const response = await fetch('http://localhost:5005/generate-qr', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 'username': username })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    qrContainer.innerHTML = `<img src="data:image/png;base64,${data.qr_code}" class="qr-image">`;
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'message success';
+                } else {
+                    messageDiv.textContent = data.error;
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Error al generar el código QR';
+                messageDiv.className = 'message error';
+            }
+        }
+
+        async function verifyCode() {
+            const code = document.getElementById('code').value;
+            const messageDiv = document.getElementById('verifyMessage');
+
+            try {
+                const response = await fetch('http://localhost:5005/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, code })
+                });
+
+                const data = await response.json();
+
+                if (data.verified) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'message success';
+                    if (username === "admin") {
+                        window.location.href = "/admin"
+                    } else {
+                        window.location.href = "/productos"
+                    }
+                } else {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Error al verificar el código';
+                messageDiv.className = 'message error';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+Flask
+pyotp
+qrcode
+Pillow
+psycopg2-binary
+Flask-SQLAlchemy
+flask-cors==4.0.0

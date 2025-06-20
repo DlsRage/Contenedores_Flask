@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Panel Administrativo</title>
@@ -196,12 +197,13 @@
             .nav-buttons {
                 flex-direction: column;
             }
-            
+
             .panel-box {
                 padding: 1rem;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 0.8rem;
             }
 
@@ -212,6 +214,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="contenedorPrincipal">
         <div class="nav-buttons">
@@ -286,7 +289,7 @@
         const btnregresar = document.getElementById('btnBack');
 
         btnregresar.addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = '/';
         });
 
         btnProductos.addEventListener('click', () => {
@@ -420,14 +423,14 @@
         }
 
         function obtenerUsuarios() {
-        fetch('http://localhost:5000/users')
-            .then(res => res.json())
-            .then(data => {
-            const tablaBody = document.querySelector('#tablaUsuarios tbody');
-            tablaBody.innerHTML = ''; // limpiar tabla
-            data.forEach(user => {
-                const fila = document.createElement('tr');
-                fila.innerHTML = `
+            fetch('http://localhost:5000/users')
+                .then(res => res.json())
+                .then(data => {
+                    const tablaBody = document.querySelector('#tablaUsuarios tbody');
+                    tablaBody.innerHTML = ''; // limpiar tabla
+                    data.forEach(user => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
                 <td>${user.id}</td>
                 <td>${user.username}</td>
                 <td>${user.email}</td>
@@ -437,52 +440,52 @@
                     <button onclick="actualizarUsuario(${user.id}, '${user.username}', '${user.email}', '${user.password}')">Actualizar</button>
                 </td>
                 `;
-                tablaBody.appendChild(fila);
-            });
-            })
-            .catch(err => console.error('Error al obtener usuarios:', err));
+                        tablaBody.appendChild(fila);
+                    });
+                })
+                .catch(err => console.error('Error al obtener usuarios:', err));
         }
 
         function eliminarUsuario(id) {
-        if (confirm('¿Seguro que quieres eliminar este usuario?')) {
-            fetch(`http://localhost:5000/users/${id}`, { method: 'DELETE' })
-            .then(res => {
-                if (!res.ok) throw new Error('No se pudo eliminar');
-                alert('Usuario eliminado correctamente');
-                obtenerUsuarios();
-            })
-            .catch(err => {
-                console.error('Error al eliminar usuario:', err);
-                alert('Error al eliminar usuario');
-            });
-        }
+            if (confirm('¿Seguro que quieres eliminar este usuario?')) {
+                fetch(`http://localhost:5000/users/${id}`, { method: 'DELETE' })
+                    .then(res => {
+                        if (!res.ok) throw new Error('No se pudo eliminar');
+                        alert('Usuario eliminado correctamente');
+                        obtenerUsuarios();
+                    })
+                    .catch(err => {
+                        console.error('Error al eliminar usuario:', err);
+                        alert('Error al eliminar usuario');
+                    });
+            }
         }
 
         function actualizarUsuario(id, username, email, password) {
-        const nuevoUsername = prompt('Nuevo nombre de usuario:', username);
-        const nuevoEmail = prompt('Nuevo email:', email);
-        const nuevoPassword = prompt('Nueva contraseña:', password);
+            const nuevoUsername = prompt('Nuevo nombre de usuario:', username);
+            const nuevoEmail = prompt('Nuevo email:', email);
+            const nuevoPassword = prompt('Nueva contraseña:', password);
 
-        if (nuevoUsername && nuevoEmail && nuevoPassword) {
-            fetch(`http://localhost:5000/users/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: nuevoUsername,
-                email: nuevoEmail,
-                password: nuevoPassword
-            })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('No se pudo actualizar');
-                alert('Usuario actualizado correctamente');
-                obtenerUsuarios();
-            })
-            .catch(err => {
-                console.error('Error al actualizar usuario:', err);
-                alert('Error al actualizar usuario');
-            });
-        }
+            if (nuevoUsername && nuevoEmail && nuevoPassword) {
+                fetch(`http://localhost:5000/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: nuevoUsername,
+                        email: nuevoEmail,
+                        password: nuevoPassword
+                    })
+                })
+                    .then(res => {
+                        if (!res.ok) throw new Error('No se pudo actualizar');
+                        alert('Usuario actualizado correctamente');
+                        obtenerUsuarios();
+                    })
+                    .catch(err => {
+                        console.error('Error al actualizar usuario:', err);
+                        alert('Error al actualizar usuario');
+                    });
+            }
         }
 
         // Opcional: formulario para agregar usuario (si quieres agregar uno, ejemplo):
@@ -511,34 +514,34 @@
         const respuestaUsuario = document.getElementById('respuestaUsuario');
 
         nuevoUsuarioForm.addEventListener('submit', e => {
-        e.preventDefault();
+            e.preventDefault();
 
-        const nuevoUsuario = {
-            username: document.getElementById('nuevoUsername').value,
-            email: document.getElementById('nuevoEmail').value,
-            password: document.getElementById('nuevoPassword').value
-        };
+            const nuevoUsuario = {
+                username: document.getElementById('nuevoUsername').value,
+                email: document.getElementById('nuevoEmail').value,
+                password: document.getElementById('nuevoPassword').value
+            };
 
-        fetch('http://localhost:5000/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(nuevoUsuario)
-        })
-            .then(res => {
-            if (!res.ok) throw new Error('Error al agregar usuario');
-            return res.json();
+            fetch('http://localhost:5000/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoUsuario)
             })
-            .then(data => {
-            respuestaUsuario.textContent = '✅ Usuario agregado correctamente.';
-            respuestaUsuario.style.color = 'green';
-            nuevoUsuarioForm.reset();
-            obtenerUsuarios();
-            })
-            .catch(err => {
-            console.error(err);
-            respuestaUsuario.textContent = '❌ Error al agregar usuario.';
-            respuestaUsuario.style.color = 'red';
-            });
+                .then(res => {
+                    if (!res.ok) throw new Error('Error al agregar usuario');
+                    return res.json();
+                })
+                .then(data => {
+                    respuestaUsuario.textContent = '✅ Usuario agregado correctamente.';
+                    respuestaUsuario.style.color = 'green';
+                    nuevoUsuarioForm.reset();
+                    obtenerUsuarios();
+                })
+                .catch(err => {
+                    console.error(err);
+                    respuestaUsuario.textContent = '❌ Error al agregar usuario.';
+                    respuestaUsuario.style.color = 'red';
+                });
         });
         obtenerProductos();
     </script>

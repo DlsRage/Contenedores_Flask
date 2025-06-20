@@ -10,11 +10,21 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+    # Verificar si no hay usuarios y crear el admin por defecto
+    if not User.query.first():
+        admin_user = User(
+            username='admin',
+            password='admin',
+            email='admin@example.com',
+            secret=""
+        )
+        db.session.add(admin_user)
+        db.session.commit()
 
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
-    new_user = User(username=data['username'], email=data['email'],password=data['password'])
+    new_user = User(username=data['username'], email=data['email'],password=data['password'],secret="")
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'User created successfully'}), 201
@@ -35,7 +45,7 @@ def update_user(id):
     user = User.query.get_or_404(id)
     user.username = data['username']
     user.email = data['email']
-    user.password=data['password']
+    user.password= data['password']
     db.session.commit()
     return jsonify({'message': 'User updated successfully'})
 

@@ -201,12 +201,9 @@
 
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-            if (document.getElementById('usuario').value === 'admin' && document.getElementById('contrasena').value === 'admin') {
-                window.location.href = 'admin.html';
-                return
-            }
+            user = document.getElementById('usuario').value
             const datos = {
-                usuario: document.getElementById('usuario').value,
+                usuario: user,
                 contrasena: document.getElementById('contrasena').value
             };
 
@@ -222,7 +219,7 @@
                 .then(data => {
                     respuesta.textContent = '';
                     respuesta.style.display = 'none';
-                    window.location.href = 'usuario_productos.html';
+                    window.location.href = `/autentificacion?dato=${encodeURIComponent(user)}`;
                 })
                 .catch(error => {
                     console.error('Error:', error);

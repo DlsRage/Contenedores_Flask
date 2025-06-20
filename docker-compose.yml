@@ -11,17 +11,17 @@ services:
       - db
     command: python app.py
     restart: always
-  
+
   web2:
-      build: .
-      ports:
-        - "5001:5000"
-      environment:
-        DATABASE_URL: postgresql://myuser2:mypassword2@db2:5432/products
-      depends_on:
-        - db2
-      command: python app2.py
-      restart: always
+    build: .
+    ports:
+      - "5001:5000"
+    environment:
+      DATABASE_URL: postgresql://myuser2:mypassword2@db2:5432/products
+    depends_on:
+      - db2
+    command: python app2.py
+    restart: always
   db:
     image: postgres:latest
     environment:
@@ -54,6 +54,16 @@ services:
       - db
       - db2
     command: python autentificacion_completo.py
+
+  auten:
+    build: Autentificacion/.
+    ports:
+      - "5005:5000"
+    environment:
+      DATABASE_URL: postgresql://myuser:mypassword@db:5432/mydatabase
+    depends_on:
+      - db
+    restart: always
 
 volumes:
   postgres_data1:
